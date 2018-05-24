@@ -112,7 +112,7 @@ class dropbox implements adapter_interface
 		return  $this->filesystem->file_size($path);
 	}
 
-	public function generate_link($path)
+	public function get_link($path)
 	{
 		return $this->adapter->getTemporaryLink($this->path . $path);
 	}

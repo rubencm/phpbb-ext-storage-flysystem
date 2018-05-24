@@ -3,6 +3,7 @@ namespace rubencm\storage_flysystem\adapter;
 
 use League\Flysystem\AdapterInterface;
 use phpbb\storage\adapter\adapter_interface;
+use phpbb\storage\exception\exception;
 use League\Flysystem\Util;
 
 class flysystem
@@ -160,5 +161,10 @@ class flysystem
 	public function file_size($path)
 	{
 		return ['size' => $this->adapter->getSize($path)];
+	}
+
+	public function get_link()
+	{
+		return $this->adapter->get_link();
 	}
 }

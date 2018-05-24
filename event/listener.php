@@ -97,12 +97,7 @@ class listener implements EventSubscriberInterface
 			return;
 		}
 
-		$adapter = $this->storage_avatar->get_adapter();
-
-		if ($adapter instanceof aws_s3 || $adapter instanceof dropbox)
-		{
-			$src = $adapter->generate_link($this->avatar_real_file($event['row']['avatar']));
-		}
+		$src = $this->storage_avatar->get_link($this->avatar_real_file($event['row']['avatar']));
 
 		$img->item(0)->setAttribute('src', $src);
 		$event['html'] = $dom->saveHTML($img->item(0));
@@ -145,11 +140,6 @@ class listener implements EventSubscriberInterface
 			return;
 		}
 
-		$adapter = $this->storage_attachment->get_adapter();
-
-		if ($adapter instanceof aws_s3 || $adapter instanceof dropbox)
-		{
-			$event['redirect'] = $adapter->generate_link($event['attachment']['physical_filename']);
-		}
+		$event['redirect'] = $this->storage_attachment->get_link($event['attachment']['physical_filename']);
 	}
 }
