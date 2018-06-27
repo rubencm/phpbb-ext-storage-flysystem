@@ -21,6 +21,7 @@ services:
         class: rubencm\storage_flysystem\adapter\dropbox
         shared: false
         arguments:
+            - '@cache'
         tags:
             - { name: storage.adapter }
 

@@ -80,6 +80,8 @@ class listener implements EventSubscriberInterface
 	*/
 	public function add_avatar_hotlink($event)
 	{
+		if(!$event['html']) return;
+
 		if (!isset($this->config['storage\\avatar\\config\\hotlink']) || !$this->config['storage\\avatar\\config\\hotlink'])
 		{
 			return;
@@ -135,7 +137,8 @@ class listener implements EventSubscriberInterface
 	*/
 	public function attachment_redirect($event)
 	{
-		if (!isset($this->config['storage\\attachment\\config\\hotlink']) || !$this->config['storage\\attachment\\config\\hotlink'])
+		if ((!isset($this->config['storage\\attachment\\config\\hotlink']) || !$this->config['storage\\attachment\\config\\hotlink']) &&
+			(!isset($this->config['storage\\attachment\\config\\share']) || !$this->config['storage\\attachment\\config\\share']))
 		{
 			return;
 		}

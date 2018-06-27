@@ -3,6 +3,7 @@ namespace rubencm\storage_flysystem\adapter;
 
 use League\Flysystem\AdapterInterface;
 use phpbb\storage\adapter\adapter_interface;
+use phpbb\storage\stream_interface;
 use phpbb\storage\exception\exception;
 use League\Flysystem\Util;
 
@@ -132,7 +133,7 @@ class flysystem
 	 */
 	public function read_stream($path)
 	{
-		return $this->adapter->read_stream($path);
+		return $this->adapter->readStream($path)['stream'];
 	}
 
 	/**
@@ -140,7 +141,7 @@ class flysystem
 	 */
 	public function write_stream($path, $resource)
 	{
-		$this->adapter->write_stream($path, $resource);
+		$this->adapter->writeStream($path, $resource, $this->config);
 	}
 
 	public function file_mimetype($path)
@@ -160,11 +161,16 @@ class flysystem
 
 	public function file_size($path)
 	{
-		return ['size' => $this->adapter->getSize($path)];
+		return ['size' => $this->adapter->getSize($path)['size']];
 	}
 
-	public function get_link()
+	public function get_link($path)
 	{
-		return $this->adapter->get_link();
+		return $this->adapter->get_link($path);
+	}
+
+	public function free_space()
+	{
+		return $this->adapter->free_space();
 	}
 }

@@ -37,6 +37,13 @@ class dropbox implements provider_interface
 						'NO' => '0',
 				],
 			],
+			'share' => [
+				'type' => 'radio',
+				'options' => [
+						'YES' => '1',
+						'NO' => '0',
+				],
+			],
 		];
 	}
 
