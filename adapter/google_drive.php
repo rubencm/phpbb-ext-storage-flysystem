@@ -24,7 +24,7 @@ class google_drive implements adapter_interface
 
 		$adapter = new GoogleDriveAdapter($service, $options['root']);
 
-		$this->filesystem =  new \flysystem($adapter);
+		$this->filesystem =  new flysystem($adapter);
 	}
 
 	/**

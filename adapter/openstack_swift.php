@@ -6,16 +6,10 @@ use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use phpbb\storage\adapter\adapter_interface;
 
-class aws_s3 implements adapter_interface
+class openstack_swift implements adapter_interface
 {
 	/** @var flysystem */
 	protected $filesystem;
-
-	/** @var S3Client */
-	protected $client;
-
-	/** @var string */
-	protected $bucket;
 
 	/** @var string */
 	protected $path;
@@ -25,19 +19,23 @@ class aws_s3 implements adapter_interface
 	 */
 	public function configure($options)
 	{
-		$this->client = new S3Client([
-			'credentials' => [
-				'key' => $options['key'],
-				'secret' => $options['secret'],
-			],
-			'region' => $options['region'],
-			'version' => $options['version'],
+		$openstack = new OpenStack\OpenStack([
+		    'authUrl' => $options['auth_url'],
+		    'region'  => $options['region'],
+		    'user'    => [
+		        'id'       => $options['user_id'],
+		        'password' => $options['password'],
+		    ],
+		    'scope'   => ['project' => ['id' => $options['project_id']]]
 		]);
 
-		$adapter = new AwsS3Adapter($this->client, $options['bucket']);
+		$container = $openstack->objectStoreV1()
+			->getContainer($options['container_name']);
 
-		$this->filesystem =  new flysystem($adapter);
-		$this->bucket = $options['bucket'];
+		$adapter = new Nimbusoft\Flysystem\OpenStack\SwiftAdapter($container);
+
+		$this->filesystem = flysystem($adapter);
+
 		$this->path = $options['path'];
 
 		if (strlen($this->path) && substr($this->path, -1) != '/')
@@ -118,11 +116,5 @@ class aws_s3 implements adapter_interface
 	public function file_size($path)
 	{
 		return  $this->filesystem->file_size($path);
-	}
-
-	public function generate_link($path)
-	{
-		return $this->client->getObjectUrl($this->bucket, $this->path . $path);
-		//return '//' . $this->bucket . '.s3.amazonaws.com/' . $this->path . $path
 	}
 }

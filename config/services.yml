@@ -17,11 +17,32 @@ services:
         tags:
             - { name: storage.adapter }
 
+    storage.adapter.azure_blob:
+        class: rubencm\storage_flysystem\adapter\azure_blob
+        shared: false
+        arguments:
+        tags:
+            - { name: storage.adapter }
+
+    storage.adapter.do_spaces:
+        class: rubencm\storage_flysystem\adapter\do_spaces
+        shared: false
+        arguments:
+        tags:
+            - { name: storage.adapter }
+
     storage.adapter.dropbox:
         class: rubencm\storage_flysystem\adapter\dropbox
         shared: false
         arguments:
-            - '@cache'
+            - '@cache.driver'
+        tags:
+            - { name: storage.adapter }
+
+    storage.adapter.ftp:
+        class: rubencm\storage_flysystem\adapter\ftp
+        shared: false
+        arguments:
         tags:
             - { name: storage.adapter }
 
@@ -32,8 +53,22 @@ services:
         tags:
             - { name: storage.adapter }
 
-    storage.adapter.ftp:
-        class: rubencm\storage_flysystem\adapter\ftp
+    storage.adapter.openstack_swift:
+        class: rubencm\storage_flysystem\adapter\openstack_swift
+        shared: false
+        arguments:
+        tags:
+            - { name: storage.adapter }
+
+    storage.adapter.rackspace:
+        class: rubencm\storage_flysystem\adapter\rackspace
+        shared: false
+        arguments:
+        tags:
+            - { name: storage.adapter }
+
+    storage.adapter.sftp:
+        class: rubencm\storage_flysystem\adapter\sftp
         shared: false
         arguments:
         tags:
@@ -46,8 +81,26 @@ services:
         tags:
             - { name: storage.provider }
 
+    storage.provider.azure_blob:
+        class: rubencm\storage_flysystem\provider\azure_blob
+        arguments:
+        tags:
+            - { name: storage.provider }
+
+    storage.provider.do_spaces:
+        class: rubencm\storage_flysystem\provider\do_spaces
+        arguments:
+        tags:
+            - { name: storage.provider }
+
     storage.provider.dropbox:
         class: rubencm\storage_flysystem\provider\dropbox
+        arguments:
+        tags:
+            - { name: storage.provider }
+
+    storage.provider.ftp:
+        class: rubencm\storage_flysystem\provider\ftp
         arguments:
         tags:
             - { name: storage.provider }
@@ -58,8 +111,20 @@ services:
         tags:
             - { name: storage.provider }
 
-    storage.provider.ftp:
-        class: rubencm\storage_flysystem\provider\ftp
+    storage.provider.openstack_swift:
+        class: rubencm\storage_flysystem\provider\openstack_swift
+        arguments:
+        tags:
+            - { name: storage.provider }
+
+    storage.provider.rackspace:
+        class: rubencm\storage_flysystem\provider\rackspace
+        arguments:
+        tags:
+            - { name: storage.provider }
+
+    storage.provider.sftp:
+        class: rubencm\storage_flysystem\provider\sftp
         arguments:
         tags:
             - { name: storage.provider }

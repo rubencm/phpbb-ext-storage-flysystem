@@ -2,20 +2,15 @@
 
 namespace rubencm\storage_flysystem\adapter;
 
-use Aws\S3\S3Client;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use OpenCloud\OpenStack as OpenCloud_OpenStack;
+use OpenCloud\Rackspace as OpenCloud_Rackspace;
+use League\Flysystem\Rackspace\RackspaceAdapter as Adapter;
 use phpbb\storage\adapter\adapter_interface;
 
-class aws_s3 implements adapter_interface
+class rackspace implements adapter_interface
 {
 	/** @var flysystem */
 	protected $filesystem;
-
-	/** @var S3Client */
-	protected $client;
-
-	/** @var string */
-	protected $bucket;
 
 	/** @var string */
 	protected $path;
@@ -25,19 +20,17 @@ class aws_s3 implements adapter_interface
 	 */
 	public function configure($options)
 	{
-		$this->client = new S3Client([
-			'credentials' => [
-				'key' => $options['key'],
-				'secret' => $options['secret'],
-			],
-			'region' => $options['region'],
-			'version' => $options['version'],
-		]);
+		$client = new Rackspace(Rackspace::UK_IDENTITY_ENDPOINT, array(
+			'username' => $options['username'],
+			'apiKey' => $options['password'],
+		));
 
-		$adapter = new AwsS3Adapter($this->client, $options['bucket']);
+		$store = $client->objectStoreService('cloudFiles', 'LON');
+		$container = $store->getContainer('flysystem');
 
-		$this->filesystem =  new flysystem($adapter);
-		$this->bucket = $options['bucket'];
+		$adapter = new Adapter($container);
+		$this->filesystem = new flysytem($adapter);
+
 		$this->path = $options['path'];
 
 		if (strlen($this->path) && substr($this->path, -1) != '/')
@@ -118,11 +111,5 @@ class aws_s3 implements adapter_interface
 	public function file_size($path)
 	{
 		return  $this->filesystem->file_size($path);
-	}
-
-	public function generate_link($path)
-	{
-		return $this->client->getObjectUrl($this->bucket, $this->path . $path);
-		//return '//' . $this->bucket . '.s3.amazonaws.com/' . $this->path . $path
 	}
 }

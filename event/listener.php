@@ -56,6 +56,7 @@ class listener implements EventSubscriberInterface
 			'core.acp_storage_load'	=> 'add_lang',
 			'core.download_file_send_to_browser_before'	=> 'attachment_redirect',
 			'core.get_avatar_after'	=> 'add_avatar_hotlink',
+			'core.viewtopic_modify_post_row' => 'attachment_new_window'
 		);
 	}
 
@@ -80,9 +81,7 @@ class listener implements EventSubscriberInterface
 	*/
 	public function add_avatar_hotlink($event)
 	{
-		if(!$event['html']) return;
-
-		if (!isset($this->config['storage\\avatar\\config\\hotlink']) || !$this->config['storage\\avatar\\config\\hotlink'])
+		if (!$event['html'] || !$this->storage_option('avatar', 'hotlink'))
 		{
 			return;
 		}
@@ -102,7 +101,7 @@ class listener implements EventSubscriberInterface
 		$src = $this->storage_avatar->get_link($this->avatar_real_file($event['row']['avatar']));
 
 		$img->item(0)->setAttribute('src', $src);
-		$event['html'] = $dom->saveHTML($img->item(0));
+		$event['html'] = $dom->saveHTML();
 	}
 
 	/**
@@ -128,8 +127,18 @@ class listener implements EventSubscriberInterface
 		return $this->config['avatar_salt'] . '_' . $filename;
 	}
 
+	protected function storage_option($storage, $option)
+	{
+		if (!isset($this->config["storage\\$storage\\config\\$option"]))
+		{
+			return false;
+		}
+
+		return $this->config["storage\\$storage\\config\\$option"];
+	}
+
 	/**
-	* Modify the html to link avatar directly
+	* Download avatar with direct link
 	*
 	* @param \phpbb\event\data $event The event object
 	* @return void
@@ -137,12 +146,47 @@ class listener implements EventSubscriberInterface
 	*/
 	public function attachment_redirect($event)
 	{
-		if ((!isset($this->config['storage\\attachment\\config\\hotlink']) || !$this->config['storage\\attachment\\config\\hotlink']) &&
-			(!isset($this->config['storage\\attachment\\config\\share']) || !$this->config['storage\\attachment\\config\\share']))
+		if (!($this->storage_option('attachment', 'hotlink') || $this->storage_option('attachment', 'share')))
 		{
 			return;
 		}
 
 		$event['redirect'] = $this->storage_attachment->get_link($event['attachment']['physical_filename']);
+	}
+
+	/**
+	* Modify the html to open external links in a new window
+	*
+	* @param \phpbb\event\data $event The event object
+	* @return void
+	* @access public
+	*/
+	public function attachment_new_window($event)
+	{
+		if ($this->storage_option('attachment', 'share'))
+		{
+			if (!empty($event['attachments'][$event['row']['post_id']]))
+			{
+				for ($i=0; $i < count($event['attachments'][$event['row']['post_id']]); $i++)
+				{
+					$dom = new \DOMDocument();
+					$dom->loadHTML($event['attachments'][$event['row']['post_id']][$i]);
+					$xpath = new \DOMXPath($dom);
+
+					$link = $xpath->query('//a');
+
+					if (!$link)
+					{
+						return;
+					}
+
+					$link->item(0)->setAttribute('target', '_blank');
+
+					$data = $event->get_data();
+					$data['attachments'][$event['row']['post_id']][$i] = $dom->saveHTML();
+					$event->set_data($data);
+				}
+			}
+		}
 	}
 }

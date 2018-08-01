@@ -12,7 +12,11 @@
       "league/flysystem": "^1.0",
       "league/flysystem-aws-s3-v3": "^1.0",
       "spatie/flysystem-dropbox": "^1.0",
-	  "nao-pon/flysystem-google-drive": "~1.1"
+	  "nao-pon/flysystem-google-drive": "~1.1",
+      "league/flysystem-azure-blob-storage": "^0.1.4",
+      "league/flysystem-sftp": "^1.0",
+      "league/flysystem-rackspace": "^1.0",
+      "nimbusoft/flysystem-openstack-swift": "^0.2.1"
    },
    "extra": {
       "display-name": "Flysystem Storage",

@@ -6,7 +6,7 @@ use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use phpbb\storage\adapter\adapter_interface;
 
-class aws_s3 implements adapter_interface
+class do_spaces implements adapter_interface
 {
 	/** @var flysystem */
 	protected $filesystem;
@@ -32,6 +32,7 @@ class aws_s3 implements adapter_interface
 			],
 			'region' => $options['region'],
 			'version' => $options['version'],
+			'endpoint' => 'https://' . $options['region'] . '.digitaloceanspaces.com',
 		]);
 
 		$adapter = new AwsS3Adapter($this->client, $options['bucket']);

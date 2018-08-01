@@ -2,7 +2,7 @@
 
 namespace rubencm\storage_flysystem\adapter;
 
-use League\Flysystem\Adapter\Ftp as FtpAdapter;
+use League\Flysystem\Sftp\SftpAdapter;
 use phpbb\storage\adapter\adapter_interface;
 
 class ftp implements adapter_interface
@@ -15,17 +15,14 @@ class ftp implements adapter_interface
 	 */
 	public function configure($options)
 	{
-		$adapter = new FtpAdapter([
+		$adapter = new SftpAdapter([
 			'host' => $options['host'],
 			'username' => $options['username'],
 			'password' => $options['password'],
-
-			/** optional config settings */
 			'port' => $options['port'],
 			'root' => $options['path'],
-			'passive' => $options['passive'],
-			'ssl' => $options['ssl'],
-			'timeout' => 30,
+			'timeout' => 10,
+			'private_key' => $options['private_key'],
 		]);
 
 		$this->filesystem =  new flysystem($adapter);
