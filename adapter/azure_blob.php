@@ -4,9 +4,10 @@ namespace rubencm\storage_flysystem\adapter;
 
 use League\Flysystem\AzureBlobStorage\AzureBlobStorageAdapter;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
-use phpbb\storage\adapter\adapter_interface;
+use phpbb\storage\adapter\adapter;
+use phpbb\storage\stream_interface;
 
-class azure_blob implements adapter_interface
+class azure_blob extends adapter implements stream_interface
 {
 	/** @var flysystem */
 	protected $filesystem;

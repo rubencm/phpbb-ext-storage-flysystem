@@ -5,9 +5,10 @@ namespace rubencm\storage_flysystem\adapter;
 use OpenCloud\OpenStack as OpenCloud_OpenStack;
 use OpenCloud\Rackspace as OpenCloud_Rackspace;
 use League\Flysystem\Rackspace\RackspaceAdapter as Adapter;
-use phpbb\storage\adapter\adapter_interface;
+use phpbb\storage\adapter\adapter;
+use phpbb\storage\stream_interface;
 
-class rackspace implements adapter_interface
+class rackspace extends adapter implements stream_interface
 {
 	/** @var flysystem */
 	protected $filesystem;

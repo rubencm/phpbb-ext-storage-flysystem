@@ -2,10 +2,11 @@
 
 namespace rubencm\storage_flysystem\adapter;
 
-use phpbb\storage\adapter\adapter_interface;
 use Hypweb\Flysystem\GoogleDrive\GoogleDriveAdapter;
+use phpbb\storage\adapter\adapter;
+use phpbb\storage\stream_interface;
 
-class google_drive implements adapter_interface
+class google_drive extends adapter implements stream_interface
 {
 	/** @var flysystem */
 	protected $filesystem;

@@ -3,9 +3,10 @@
 namespace rubencm\storage_flysystem\adapter;
 
 use League\Flysystem\Adapter\Ftp as FtpAdapter;
-use phpbb\storage\adapter\adapter_interface;
+use phpbb\storage\adapter\adapter;
+use phpbb\storage\stream_interface;
 
-class ftp implements adapter_interface
+class ftp extends adapter implements stream_interface
 {
 	/** @var flysystem */
 	protected $filesystem;

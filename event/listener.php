@@ -151,7 +151,18 @@ class listener implements EventSubscriberInterface
 			return;
 		}
 
-		$event['redirect'] = $this->storage_attachment->get_link($event['attachment']['physical_filename']);
+		// Images can't be previewed in posts
+		if (!$this->storage_option('attachment', 'hotlink') && $this->storage_option('attachment', 'share') && substr($event['attachment']['mimetype'], 0, 6) == 'image/')
+		{
+			return;
+		}
+
+		$url =  $this->storage_attachment->get_link($event['attachment']['physical_filename']);
+
+		if ($url)
+		{
+			$event['redirect'] = $url;
+		}
 	}
 
 	/**
@@ -175,7 +186,7 @@ class listener implements EventSubscriberInterface
 
 					$link = $xpath->query('//a');
 
-					if (!$link)
+					if (!$link || !$link['length'])
 					{
 						return;
 					}

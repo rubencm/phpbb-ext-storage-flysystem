@@ -5,7 +5,6 @@ namespace rubencm\storage_flysystem\adapter;
 use Spatie\Dropbox\Client as DropboxClient;
 use Spatie\FlysystemDropbox\DropboxAdapter;
 use phpbb\storage\adapter\adapter;
-use phpbb\storage\adapter\adapter_interface;
 use phpbb\storage\stream_interface;
 use phpbb\cache\driver\driver_interface;
 
@@ -151,7 +150,21 @@ class dropbox extends adapter implements stream_interface
 
 	public function get_link($path)
 	{
-		if ($this->share)
+		$link = null;
+
+		if ($this->hotlink)
+		{
+			$link = $this->cache->get('_dropbox_temporarylink_' . $this->storage . '_' . $path);
+
+			if ($link === false)
+			{
+				$link = $this->adapter->getTemporaryLink($this->path . $path);
+
+				// Temporary links expire in four hours
+				$this->cache->put('_dropbox_temporarylink_' . $this->storage . '_' . $path, $link, 4*3600);
+			}
+		}
+		else if ($this->share)
 		{
 			$link = $this->cache->get('_dropbox_sharedlink_' . $this->storage . '_' . $path);
 
@@ -174,18 +187,6 @@ class dropbox extends adapter implements stream_interface
 				}
 
 				$this->cache->put('_dropbox_sharedlink_' . $this->storage . '_' . $path, $link);
-			}
-		}
-		else if ($this->hotlink)
-		{
-			$link = $this->cache->get('_dropbox_temporarylink_' . $this->storage . '_' . $path);
-
-			if ($link === false)
-			{
-				$link = $this->adapter->getTemporaryLink($this->path . $path);
-
-				// Temporary links expire in four hours
-				$this->cache->put('_dropbox_temporarylink_' . $this->storage . '_' . $path, $link, 4*3600);
 			}
 		}
 
