@@ -101,4 +101,9 @@ class google_drive extends adapter implements stream_interface
 	{
 		return  $this->filesystem->file_size($path);
 	}
+
+	public function free_space()
+	{
+		throw new \phpbb\storage\exception\exception('NOT_AVAILABLE');
+	}
 }

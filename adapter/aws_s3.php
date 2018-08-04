@@ -126,4 +126,9 @@ class aws_s3 extends adapter implements stream_interface
 		return $this->client->getObjectUrl($this->bucket, $this->path . $path);
 		//return '//' . $this->bucket . '.s3.amazonaws.com/' . $this->path . $path
 	}
+
+	public function free_space()
+	{
+		throw new \phpbb\storage\exception\exception('NOT_AVAILABLE');
+	}
 }
