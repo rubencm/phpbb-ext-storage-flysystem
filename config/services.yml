@@ -1,10 +1,26 @@
 services:
+
+# Listeners
     rubencm.storage_flysystem.listener:
         class: rubencm\storage_flysystem\event\listener
+        arguments:
+            - '@language'
+        tags:
+            - { name: event.listener }
+
+    rubencm.storage_flysystem.attachment_listener:
+        class: rubencm\storage_flysystem\event\attachment_listener
         arguments:
             - '@config'
             - '@language'
             - '@storage.attachment'
+        tags:
+            - { name: event.listener }
+
+    rubencm.storage_flysystem.avatar_listener:
+        class: rubencm\storage_flysystem\event\avatar_listener
+        arguments:
+            - '@config'
             - '@storage.avatar'
         tags:
             - { name: event.listener }

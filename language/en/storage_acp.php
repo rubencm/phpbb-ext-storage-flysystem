@@ -47,7 +47,7 @@ $lang = array_merge($lang, array(
 	'STORAGE_ADAPTER_DROPBOX_OPTION_HOTLINK'				=> 'Hotlink',
 	'STORAGE_ADAPTER_DROPBOX_OPTION_HOTLINK_EXPLAIN'		=> 'The file will be linked directly.',
 	'STORAGE_ADAPTER_DROPBOX_OPTION_SHARE'					=> 'Share',
-	'STORAGE_ADAPTER_DROPBOX_OPTION_SHARE_EXPLAIN'			=> 'Open new window to the share page.',
+	'STORAGE_ADAPTER_DROPBOX_OPTION_SHARE_EXPLAIN'			=> 'Open new window to the share page.<br>This option is for attachments, and overrides Hotlink if enabled.',
 
 	// Ftp
 	'STORAGE_ADAPTER_FTP_NAME'					=> 'Ftp',

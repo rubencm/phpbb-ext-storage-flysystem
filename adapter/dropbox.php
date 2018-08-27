@@ -141,10 +141,13 @@ class dropbox extends adapter implements stream_interface
 
 	protected function normalizePath(string $path): string
 	{
-		if (preg_match("/^id:.*|^rev:.*|^(ns:[0-9]+(\/.*)?)/", $path) === 1) {
+		if (preg_match("/^id:.*|^rev:.*|^(ns:[0-9]+(\/.*)?)/", $path) === 1)
+		{
 			return $path;
 		}
+
 		$path = trim($path, '/');
+		
 		return ($path === '') ? '' : '/'.$path;
 	}
 
@@ -152,19 +155,7 @@ class dropbox extends adapter implements stream_interface
 	{
 		$link = null;
 
-		if ($this->hotlink)
-		{
-			$link = $this->cache->get('_dropbox_temporarylink_' . $this->storage . '_' . $path);
-
-			if ($link === false)
-			{
-				$link = $this->adapter->getTemporaryLink($this->path . $path);
-
-				// Temporary links expire in four hours
-				$this->cache->put('_dropbox_temporarylink_' . $this->storage . '_' . $path, $link, 4*3600);
-			}
-		}
-		else if ($this->share)
+		if ($this->share)
 		{
 			$link = $this->cache->get('_dropbox_sharedlink_' . $this->storage . '_' . $path);
 
@@ -187,6 +178,18 @@ class dropbox extends adapter implements stream_interface
 				}
 
 				$this->cache->put('_dropbox_sharedlink_' . $this->storage . '_' . $path, $link);
+			}
+		}
+		else if ($this->hotlink)
+		{
+			$link = $this->cache->get('_dropbox_temporarylink_' . $this->storage . '_' . $path);
+
+			if ($link === false)
+			{
+				$link = $this->adapter->getTemporaryLink($this->path . $path);
+
+				// Temporary links expire in four hours
+				$this->cache->put('_dropbox_temporarylink_' . $this->storage . '_' . $path, $link, 4*3600);
 			}
 		}
 
