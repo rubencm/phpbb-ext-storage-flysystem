@@ -17,7 +17,7 @@ class azure_blob implements provider_interface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_adapter_class()
+	public function get_adapter_class(): string
 	{
 		return \rubencm\storage_flysystem\adapter\azure_blob::class;
 	}

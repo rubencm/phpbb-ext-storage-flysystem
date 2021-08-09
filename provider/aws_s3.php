@@ -17,7 +17,7 @@ class aws_s3 implements provider_interface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_adapter_class()
+	public function get_adapter_class(): string
 	{
 		return \rubencm\storage_flysystem\adapter\aws_s3::class;
 	}

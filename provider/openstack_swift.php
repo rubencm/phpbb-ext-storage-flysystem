@@ -17,7 +17,7 @@ class openstack_swift implements provider_interface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function get_adapter_class()
+	public function get_adapter_class(): string
 	{
 		return \rubencm\storage_flysystem\adapter\openstack_swift::class;
 	}
