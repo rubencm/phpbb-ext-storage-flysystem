@@ -6,7 +6,7 @@ use League\Flysystem\Sftp\SftpAdapter;
 use phpbb\storage\adapter\adapter;
 use phpbb\storage\stream_interface;
 
-class ftp extends adapter implements stream_interface
+class sftp extends adapter implements stream_interface
 {
 	/** @var flysystem */
 	protected $filesystem;

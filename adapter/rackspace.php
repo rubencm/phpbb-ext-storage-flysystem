@@ -4,7 +4,7 @@ namespace rubencm\storage_flysystem\adapter;
 
 use OpenCloud\OpenStack as OpenCloud_OpenStack;
 use OpenCloud\Rackspace as OpenCloud_Rackspace;
-use League\Flysystem\Rackspace\RackspaceAdapter as Adapter;
+use League\Flysystem\Rackspace\RackspaceAdapter as RackspaceAdapter;
 use phpbb\storage\adapter\adapter;
 use phpbb\storage\stream_interface;
 
@@ -29,7 +29,7 @@ class rackspace extends adapter implements stream_interface
 		$store = $client->objectStoreService('cloudFiles', 'LON');
 		$container = $store->getContainer('flysystem');
 
-		$adapter = new Adapter($container);
+		$adapter = new RackspaceAdapter($container);
 		$this->filesystem = new flysytem($adapter);
 
 		$this->path = $options['path'];
